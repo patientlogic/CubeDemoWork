@@ -117,6 +117,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
+    // Letterboxing / margins: warm neutral gray to match track_background.png surround.
+    director->setClearColor(Color4F(238.f / 255.f, 236.f / 255.f, 232.f / 255.f, 1.f));
+
     auto scene = GameScene::createScene();
     director->runWithScene(scene);
 

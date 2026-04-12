@@ -27,3 +27,7 @@ The executable is written under the solution directory, for example:
 - `proj.win32/Release.win32/CubeDemoWork.exe`
 
 A **Custom Build Step** on the app project copies the **`Resources`** folder into that output directory so assets are next to the `.exe`. If resources are missing at runtime, copy `Resources` manually into the same folder as `CubeDemoWork.exe`.
+
+## Track background
+
+The scene loads **`Resources/track_background.png`** (squircle board with a yellow arrow lane). Replace that file with your own square artwork if you like. Path alignment is in `GameScene::setupBackgroundAndPath()`: **`kHalfNormOuter`** sets top/bottom half‑width, **`kHalfNormSide`** sets how far in from the sides the left/right straights sit (smaller = closer to the yellow center line on those edges). Adjust **`kCornerNorm`** for corner radius.
