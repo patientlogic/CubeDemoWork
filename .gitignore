@@ -1,6 +1,4 @@
 /cocos2d
-proj.android
-proj.linux
 proj.win32/Debug.*
 /proj.win32/Release.*
 /proj.win32/*.vcxproj.user
