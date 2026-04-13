@@ -127,6 +127,13 @@ void CubeSprite::boostRollSpinFromCollision(float normalImpulseMagnitude)
         _rollSpinRate = -cap;
 }
 
+void CubeSprite::boostPathSpeedFromWallHit(float deltaPathSpeedLocal)
+{
+    if (!_wallKickEligible || deltaPathSpeedLocal <= 0.f)
+        return;
+    _pathSpeed += deltaPathSpeedLocal;
+}
+
 void CubeSprite::integrateCornerRoll(float cornerArcWeight, float pathSpeedLocal, float /*dt*/)
 {
     const float enterThresh = 0.28f;

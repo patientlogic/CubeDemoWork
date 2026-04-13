@@ -1127,6 +1127,7 @@ void GameScene::trySpawnCube(float arc, float targetCruise, int paletteIndex)
     cube->setLateralVel(cocos2d::random(-22.f, 22.f));
     cube->seedRollPhase(cocos2d::random(0.f, TWO_PI));
     cube->seedVisualHeading(atan2f(t.y, t.x));
+    cube->setWallKickEligible(cocos2d::random(0.f, 1.f) < 0.36f);
 
     _arc.push_back(wrapS(arc));
     _cubes.push_back(cube);
@@ -1316,34 +1317,51 @@ void GameScene::update(float dt)
                 toCenter = n;
             else
                 toCenter.normalize();
+            bool wallHit = false;
+            float wallImpactLat = 0.f;
             if (Vec2::dot(n, toCenter) >= 0.f)
             {
                 if (lat > capIn)
                 {
+                    wallImpactLat = fabsf(lv);
                     lat = capIn;
                     lv *= -0.35f;
+                    wallHit = true;
                 }
                 else if (lat < -capOut)
                 {
+                    wallImpactLat = fabsf(lv);
                     lat = -capOut;
                     lv *= -0.35f;
+                    wallHit = true;
                 }
             }
             else
             {
                 if (lat > capOut)
                 {
+                    wallImpactLat = fabsf(lv);
                     lat = capOut;
                     lv *= -0.35f;
+                    wallHit = true;
                 }
                 else if (lat < -capIn)
                 {
+                    wallImpactLat = fabsf(lv);
                     lat = -capIn;
                     lv *= -0.35f;
+                    wallHit = true;
                 }
             }
             c->setLateralOffset(lat);
             c->setLateralVel(lv);
+            if (wallHit && c->isWallKickEligible())
+            {
+                const float imp = std::max(wallImpactLat, 6.f);
+                const float dPath = _baseCruise * cocos2d::random(0.04f, 0.095f) + imp * cocos2d::random(0.035f, 0.1f);
+                c->boostPathSpeedFromWallHit(dPath);
+                c->boostRollSpinFromCollision(imp * cocos2d::random(0.22f, 0.48f));
+            }
         }
 
         for (int i = 0; i < n; ++i)

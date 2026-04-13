@@ -93,6 +93,12 @@ public:
     void seedRollPhase(float radians) { _rollPhase = radians; }
     void seedVisualHeading(float radians) { _visualHeading = radians; }
 
+    /** If true, hitting the playfield lateral wall gives a small along-path speed kick. */
+    void setWallKickEligible(bool v) { _wallKickEligible = v; }
+    bool isWallKickEligible() const { return _wallKickEligible; }
+    /** Add to path speed (local units/s) after a lateral wall hit; no-op if not eligible. */
+    void boostPathSpeedFromWallHit(float deltaPathSpeedLocal);
+
     /**
      * Roll + sprite frame; path speed easing is handled by integratePathSpeed in GameScene.
      */
@@ -124,6 +130,7 @@ private:
     /** Visual spin rate (rad/s); only from corner/collision impulses, decays at rest. */
     float _rollSpinRate = 0.f;
     float _prevCornerRollWeight = 0.f;
+    bool _wallKickEligible = false;
     /** Smoothed travel heading (rad, CCW from +X); drives node rotation vs baked yaw strip. */
     float _visualHeading = 0.f;
 
